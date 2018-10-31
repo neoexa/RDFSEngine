@@ -1,33 +1,17 @@
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
 import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.Rio;
-import org.openrdf.rio.helpers.RDFHandlerBase;
 
 public final class RDFRawParser {
 
     public static void main(String args[]) throws IOException {
 
 
-        Reader reader = new FileReader("../RDFprojet/100K.rdfxml");
+        Reader reader = new FileReader("../RDFSEngine/data/100K.rdfxml");
 
         org.openrdf.rio.RDFParser rdfParser = Rio
                 .createParser(RDFFormat.RDFXML);
