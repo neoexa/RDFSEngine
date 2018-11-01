@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class Dictionary {
+public class Dictionary{
 
     //Dictionary with objects, predicates and subject sorted | TreeMap<Key,Value> -> <String,Integer>
     TreeMap < String, Integer > dico;
@@ -46,12 +46,12 @@ public class Dictionary {
         }
     }
 
-    //Getter Dictionary
+    //Getter Dico
     public TreeMap<String, Integer> getDico() {
         return dico;
     }
 
-    //Setter Dictionary
+    //Setter Dico
     public void setDico(TreeMap<String, Integer> dico) {
         this.dico = dico;
     }

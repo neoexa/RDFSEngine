@@ -1,20 +1,21 @@
 import java.util.ArrayList;
 
 public class Query {
-    ArrayList <Condition> conditions;
 
-    public Query(ArrayList<Condition> String) {
+    private ArrayList <Condition> query;
+
+    public Query(ArrayList<Condition> query) {
         super();
-        this.conditions = query;
+        this.query = query;
     }
 
     public Query() {
         super();
-        this.conditions = new ArrayList<>();
+        this.query = new ArrayList<>();
     }
 
     public void addCondition(Condition c) {
-        this.conditions.add(c);
+        this.query.add(c);
     }
 
     @Override
@@ -26,12 +27,12 @@ public class Query {
         return toS;
     }
 
-    public ArrayList<Condition> getListCondition() {
-        return conditions;
+    public ArrayList<Condition> getConditions() {
+        return query;
     }
 
-    public void setListCondition(ArrayList<Condition> conditions) {
-        this.conditions = conditions;
+    public void setConditions(ArrayList<Condition> query) {
+        this.query = query;
     }
 
 
