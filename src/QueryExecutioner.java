@@ -16,7 +16,7 @@ public class QueryExecutioner {
         this.mIndex = mModel.getmIndex();
     }
 
-    public void execute() {
+    public ArrayList<String> execute() {
         ArrayList<String> results = new ArrayList<>();
         Stack<TreeSet<Integer>> toMergeJoin = new Stack<>();
         ArrayList<Condition> mConditions = mQuery.getConditions();
@@ -31,6 +31,8 @@ public class QueryExecutioner {
 
             toMergeJoin.add(Isubject);
 
+            System.out.println(Isubject.toString());
+
         }
 
         while (toMergeJoin.size() > 1) {
@@ -39,13 +41,14 @@ public class QueryExecutioner {
 
             TreeSet<Integer> tmp = intersection(res1, res2);
             toMergeJoin.push(tmp);
-            System.out.print(toMergeJoin.size());
         }
         TreeSet<Integer> finalRes = toMergeJoin.pop();
 
         for(Integer s: finalRes) {
             results.add(mDico.getBase().get(s));
         }
+
+        return results;
     }
 
     public static TreeSet<Integer> intersection(TreeSet<Integer> a, TreeSet<Integer> b) {
