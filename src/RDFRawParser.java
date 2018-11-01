@@ -35,21 +35,6 @@ public final class RDFRawParser {
 
 
 
-    public static ArrayList<String> query(Index index, Dictionary dico, String predicate, String object) {
-
-        int Ipredicate = dico.getDico().get(predicate);
-        int Iobject = dico.getDico().get(object);
-
-        ArrayList<Integer> Isubject = index.getPos().get(Ipredicate).get(Iobject);
-        ArrayList<String> subject = new ArrayList<>();
-
-
-        for(Integer s: Isubject) {
-            subject.add(dico.getBase().get(s));
-        }
-
-
-        return subject;
 
     }
 }
