@@ -1,10 +1,14 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class Index {
 
-    private HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> pos =  new HashMap<>();
-    private HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> ops =  new HashMap<>();
+
+    //TreeSet for Ordering S index (For later sort-merge-join)
+    private HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> pos =  new HashMap<>();
+    private HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> ops =  new HashMap<>();
 
     // Create Index ops and pos
     public Index(Dictionary dico, RDFListener list) {
@@ -16,15 +20,16 @@ public class Index {
             int p = dico.getDico().get(list.predicates.get(i));
             int s = dico.getDico().get(list.subjects.get(i));
 
-            ops.putIfAbsent(o, new HashMap<Integer, ArrayList<Integer> >() ) ;
-            HashMap<Integer, ArrayList<Integer>> hashOps = ops.get(o);
-            hashOps.putIfAbsent(p, new ArrayList<Integer>());
-            hashOps.get(p).add(s);
+            ops.putIfAbsent(o, new HashMap<Integer, TreeSet<Integer>>()) ;
 
-            pos.putIfAbsent(p, new HashMap<Integer, ArrayList<Integer> >() ) ;
-            HashMap<Integer, ArrayList<Integer>> hashPos = pos.get(p);
-            hashPos.putIfAbsent(o, new ArrayList<Integer>());
-            hashPos.get(o).add(s);
+            HashMap<Integer, TreeSet<Integer>> hashPS = ops.get(o);
+            hashPS.putIfAbsent(p, new TreeSet<Integer>());
+            hashPS.get(p).add(s);
+
+            pos.putIfAbsent(p, new HashMap<Integer, TreeSet<Integer> >() ) ;
+            HashMap<Integer, TreeSet<Integer>> hashOS = pos.get(p);
+            hashOS.putIfAbsent(o, new TreeSet<Integer>());
+            hashOS.get(o).add(s);
 
             i++;
         }
@@ -32,19 +37,19 @@ public class Index {
 
     }
 
-    public HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> getPos() {
+    public HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> getPos() {
         return pos;
     }
 
-    public void setPos(HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> pos) {
+    public void setPos(HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> pos) {
         this.pos = pos;
     }
 
-    public HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> getOps() {
+    public HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> getOps() {
         return ops;
     }
 
-    public void setOps(HashMap<Integer, HashMap<Integer, ArrayList<Integer>>> ops) {
+    public void setOps(HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> ops) {
         this.ops = ops;
     }
 

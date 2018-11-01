@@ -5,39 +5,33 @@ import java.util.ArrayList;
 public class RDFSEngine {
 
     public static void main(String[] args) throws IOException {
-        // TODO Auto-generated method stub
-        RDFRawParser parcer = new RDFRawParser();
-        parcer.parse("../RDFprojet/100K.rdfxml");
 
-        Dictionary dico = new Dictionary(parcer.getList());
-        Index index = new Index(dico, parcer.getList());
+        RDFRawParser parser = new RDFRawParser();
+        parser.parse("../RDFSEngine/data/100K.rdfxml");
+
+        Dictionary mDictionary = new Dictionary(parser.getList());
+        Index mIndex = new Index(mDictionary, parser.getList());
+
+        Model mModel = new Model(mIndex, mDictionary);
+
         QueryFactory factory = new QueryFactory();
-        // Query q = query.create("ca");
-        // System.out.println(q.toString());
-        factory.createMultipleQuery("../RDFprojet/query.queryset");
-        // dico.writeDico();
-        // dico.writeBase();
-        // query.executeListQuery("../RDFprojet/")
-        // System.out.println("Result : " + query(index, dico , "http://db.uwaterloo.ca/~galuc/wsdbm/userId", "9279708" ).toString());
+
+        String mQuery = "SELECT ?v0 WHERE {\n" +
+                "\t?v0 <http://purl.org/dc/terms/Location> <http://db.uwaterloo.ca/~galuc/wsdbm/City73> .\n" +
+                "\t?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> <http://db.uwaterloo.ca/~galuc/wsdbm/Gender0> .\n" +
+                "\t?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/Role2> .\n" +
+                "} ";
+        Query q = factory.createSimpleQuery(mQuery);
+
+        //System.out.print(q.getConditions().toString());
+
+        QueryExecutioner qe = new QueryExecutioner(q, mModel);
+
+        qe.execute();
+
+
 
     }
 
-    public static ArrayList<String> query(Index index, Dictionary dico, String predicate, String object) {
-
-        int Ipredicate = dico.getDico().get(predicate);
-        int Iobject = dico.getDico().get(object);
-
-        ArrayList<Integer> Isubject = index.getPos().get(Ipredicate).get(Iobject);
-        ArrayList<String> subject = new ArrayList<>();
-
-
-        for(Integer s: Isubject) {
-            subject.add(dico.getBase().get(s));
-        }
-
-
-        return subject;
-
-    }
 
 }

@@ -30,14 +30,11 @@ public class QueryFactory {
 
 
             if(i == 0) {
-                System.out.println("Predicat : " + matcher.group(1).replaceAll("<*>*", ""));
                 predicat = matcher.group(1).replaceAll("<*>*", "");
                 i++;
             }
             else if(i == 1) {
-                System.out.println("Objet : " + matcher.group(1).replaceAll("<*>*", ""));
                 object = matcher.group(1).replaceAll("<*>*", "");
-
                 i = 0;
                 Condition c = new Condition(predicat, object);
                 query.addCondition(c);
