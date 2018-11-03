@@ -13,11 +13,11 @@ import java.util.regex.Pattern;
 
 public class QueryFactory {
 
+    //From String, create object Query
+    //Return Query for each Query in the file
     public Query createSimpleQuery(String q) {
 
         Query query = new Query();
-
-        String qu = "SELECT ?v0 WHERE { ?v0 <http://purl.org/dc/terms/Location> <http://db.uwaterloo.ca/~galuc/wsdbm/City7>.} ";
 
         Pattern pattern = Pattern.compile("(<[^>]+>)");
         Matcher matcher = pattern.matcher(q);
@@ -30,11 +30,14 @@ public class QueryFactory {
 
 
             if(i == 0) {
+                //System.out.println("Predicat : " + matcher.group(1).replaceAll("<*>*", ""));
                 predicat = matcher.group(1).replaceAll("<*>*", "");
                 i++;
             }
             else if(i == 1) {
+                //System.out.println("Objet : " + matcher.group(1).replaceAll("<*>*", ""));
                 object = matcher.group(1).replaceAll("<*>*", "");
+
                 i = 0;
                 Condition c = new Condition(predicat, object);
                 query.addCondition(c);
@@ -47,8 +50,9 @@ public class QueryFactory {
         return query;
     }
 
-    //Read into the file and for each Query, executeQuery()
-    public ArrayList<Query> createMultipleQuery(String path) throws IOException {
+    //Read into the file and call [createSimpleQuery()] for each Query found
+    //Return ArrayList Query for each Query in the file
+    public ArrayList<Query> loadFromFile(String path) throws IOException {
 
         ArrayList<Query> listQuery = new ArrayList<>();
 
@@ -62,7 +66,7 @@ public class QueryFactory {
             sQuery += st;
             if(st.contains("}")) {
 
-                System.out.println("#" + sQuery);
+                //System.out.println("#" + sQuery);
                 listQuery.add(createSimpleQuery(sQuery));
                 sQuery = "";
 
@@ -72,6 +76,19 @@ public class QueryFactory {
         return listQuery;
     }
 
+    //Read into the folder and call [loadFromFile()] for each file
+    //Return ArrayList containing ArrayList<Query> for each file
+    public ArrayList<ArrayList<Query>> loadFromFolder(String path) throws IOException {
+        ArrayList<ArrayList<Query>> listFileQuery = new ArrayList<>();
+        File folder = new File(path);
+        File[] listOfFiles = folder.listFiles();
 
+        for (int i = 0; i < listOfFiles.length; i++) {
+            if (listOfFiles[i].isFile()) {
+                listFileQuery.add(loadFromFile(path+"/"+listOfFiles[i].getName()));
+            }
+        }
+        return listFileQuery;
+    }
 }
 

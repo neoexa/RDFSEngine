@@ -21,17 +21,28 @@ public class QueryExecutioner {
         Stack<TreeSet<Integer>> toMergeJoin = new Stack<>();
         ArrayList<Condition> mConditions = mQuery.getConditions();
 
-
         for (Condition c : mConditions) {
-            int Ipredicate = mDico.getDico().get(c.getP());
-            int Iobject = mDico.getDico().get(c.getO());
+            int Ipredicate;
+            int Iobject;
+            try {
+                Ipredicate = mDico.getDico().get(c.getP());
+                Iobject = mDico.getDico().get(c.getO());
+            }catch (NullPointerException e) {
+
+                return results;
+
+            }
 
             //Optimisation !!!
-            TreeSet<Integer> Isubject = mIndex.getPos().get(Ipredicate).get(Iobject);
 
-            toMergeJoin.add(Isubject);
 
-            System.out.println(Isubject.toString());
+            HashMap <Integer,TreeSet<Integer>> objects = mIndex.getPos().get(Ipredicate);
+
+            //System.out.println(mIndex.getPos().get(Ipredicate).size());
+            if(objects.containsKey(Iobject)) {
+                TreeSet<Integer> Isubject  = objects.get(Iobject);
+                toMergeJoin.add(Isubject);
+            }
 
         }
 
@@ -42,30 +53,31 @@ public class QueryExecutioner {
             TreeSet<Integer> tmp = intersection(res1, res2);
             toMergeJoin.push(tmp);
         }
-        TreeSet<Integer> finalRes = toMergeJoin.pop();
-
-        for(Integer s: finalRes) {
-            results.add(mDico.getBase().get(s));
+        if(!toMergeJoin.isEmpty()) {
+            TreeSet<Integer> finalRes = toMergeJoin.pop();
+            for(Integer s: finalRes) {
+                results.add(mDico.getBase().get(s));
+            }
         }
 
         return results;
     }
 
+
     public static TreeSet<Integer> intersection(TreeSet<Integer> a, TreeSet<Integer> b) {
         // unnecessary; just an optimization to iterate over the smaller set
+        if (a == null) return  b;
+        if (b == null) return  a;
+
         if (a.size() > b.size()) {
-            return intersection(b, a);
+            a.retainAll(b);
+            return a;
+        }
+        else {
+            b.retainAll(a);
+            return b;
         }
 
-        TreeSet<Integer> results = new TreeSet<>();
-
-        for (Integer element : a) {
-            if (b.contains(element)) {
-                results.add(element);
-            }
-        }
-
-        return results;
     }
 
     //public String getExecTime(){}

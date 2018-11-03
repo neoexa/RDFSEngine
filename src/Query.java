@@ -22,7 +22,7 @@ public class Query {
     public String toString() {
         String toS = "#";
         for(Condition c : query) {
-            toS += query.toString();
+            toS += c.toString();
         }
         return toS;
     }
