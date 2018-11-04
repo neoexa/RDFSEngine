@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RDFSEngine.jar">
+    <output-path>$USER_HOME$/Desktop</output-path>
+    <root id="archive" name="RDFSEngine.jar">
+      <element id="module-output" name="RDFSEngine" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/commons-io-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/slf4j-api-1.6.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/sesame-util-2.7.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/slf4j-simple-1.6.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/sesame-model-2.7.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/sesame-rio-api-2.7.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/sesame-rio-rdfxml-2.7.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/sesame-rio-extensions-api-0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/Materiel pour le projet-20181031/libraries/sesame-queryalgebra-evaluation-2.7.11.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

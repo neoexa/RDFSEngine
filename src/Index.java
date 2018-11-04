@@ -1,40 +1,69 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class Index {
+public class Index {private HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> pos =  new HashMap<>();
+    private HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> ops = new HashMap<>();
+    private HashMap<Integer, HashMap<Integer, MutableDouble>> op =  new HashMap<>();
+    private HashMap<Integer, HashMap<Integer, MutableDouble>> po =  new HashMap<>();
+    private HashMap<Integer, MutableDouble> io =  new HashMap<>();
+    private HashMap<Integer, MutableDouble> ip =  new HashMap<>();
+    private int nbTriple;
 
-
-    //TreeSet for Ordering S index (For later sort-merge-join)
-    private HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> pos =  new HashMap<>();
-    private HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> ops =  new HashMap<>();
+    class MutableDouble {
+        int sizeComp;
+        Double value = 0.0; // note that we start at 1 since we're counting
+        public void increment () { value++ ;}
+        public Double  get () { return value;}
+    }
 
     // Create Index ops and pos
     public Index(Dictionary dico, RDFListener list) {
 
         int i=0;
-        while(i<list.nbTriple){
 
-            int o = dico.getDico().get(list.objects.get(i));
-            int p = dico.getDico().get(list.predicates.get(i));
-            int s = dico.getDico().get(list.subjects.get(i));
+        while(i<list.getNbTriple()){
 
-            ops.putIfAbsent(o, new HashMap<Integer, TreeSet<Integer>>()) ;
+            int o = dico.getDico().get(list.getObjects().get(i));
+            int p = dico.getDico().get(list.getPredicates().get(i));
+            int s = dico.getDico().get(list.getSubjects().get(i));
 
-            HashMap<Integer, TreeSet<Integer>> hashPS = ops.get(o);
-            hashPS.putIfAbsent(p, new TreeSet<Integer>());
-            hashPS.get(p).add(s);
+            ops.putIfAbsent(o, new HashMap<Integer, TreeSet<Integer> >() ) ;
+            HashMap<Integer, TreeSet<Integer>> hashPs = ops.get(o);
+            hashPs.putIfAbsent(p, new TreeSet<Integer>());
+            hashPs.get(p).add(s);
 
             pos.putIfAbsent(p, new HashMap<Integer, TreeSet<Integer> >() ) ;
-            HashMap<Integer, TreeSet<Integer>> hashOS = pos.get(p);
-            hashOS.putIfAbsent(o, new TreeSet<Integer>());
-            hashOS.get(o).add(s);
+            HashMap<Integer, TreeSet<Integer>> hashOs = pos.get(p);
+            hashOs.putIfAbsent(o, new TreeSet<Integer>());
+            hashOs.get(o).add(s);
+
+            op.putIfAbsent(o, new HashMap<Integer, MutableDouble >() ) ;
+            HashMap<Integer, MutableDouble> hashPf = op.get(o);
+            hashPf.putIfAbsent(p, new MutableDouble());
+            hashPf.get(p).increment();
+
+            po.putIfAbsent(p, new HashMap<Integer, MutableDouble >() ) ;
+            HashMap<Integer, MutableDouble> hashOf = po.get(p);
+            hashOf.putIfAbsent(o, new MutableDouble());
+            hashOf.get(o).increment();
+
+            io.put(o, new MutableDouble());
+            io.get(o).increment();
+
+            ip.putIfAbsent(p, new MutableDouble());
+            ip.get(p).increment();
 
             i++;
         }
 
 
+
+
+    }
+
+    public int getNbTriple() {
+        return nbTriple;
     }
 
     public HashMap<Integer, HashMap<Integer, TreeSet<Integer>>> getPos() {
@@ -53,6 +82,40 @@ public class Index {
         this.ops = ops;
     }
 
+    public HashMap<Integer, HashMap<Integer, MutableDouble>> getOp() {
+        return op;
+    }
 
+    public void setOp(HashMap<Integer, HashMap<Integer, MutableDouble>> op) {
+        this.op = op;
+    }
+
+    public HashMap<Integer, HashMap<Integer, MutableDouble>> getPo() {
+        return po;
+    }
+
+    public void setPo(HashMap<Integer, HashMap<Integer, MutableDouble>> po) {
+        this.po = po;
+    }
+
+    public HashMap<Integer, MutableDouble> getIo() {
+        return io;
+    }
+
+    public void setIo(HashMap<Integer, MutableDouble> io) {
+        this.io = io;
+    }
+
+    public HashMap<Integer, MutableDouble> getIp() {
+        return ip;
+    }
+
+    public void setIp(HashMap<Integer, MutableDouble> ip) {
+        this.ip = ip;
+    }
+
+    public void setNbTriple(int nbTriple) {
+        this.nbTriple = nbTriple;
+    }
 
 }

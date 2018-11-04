@@ -1,28 +1,37 @@
-import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class RDFSEngine {
 
     public static void main(String[] args) throws IOException {
-        RDFRawParser parser = new RDFRawParser();
-        parser.parse("../RDFSEngine/data/500K.rdfxml");
+        boolean verbose = false, exportResults = false, exportStats = false, workloadTime = false;
+        if(args.length != 3) {
+            System.out.println("At least 3 arguments ");
+        }
+        String queries = args[1];
+        String data = args[2];
+        String output = args[3];
+        if(args[4].equals("-verbose")) verbose = true;
+        if(args[5].equals("-export_results")) exportResults = true;
+        if(args[6].equals("-export_stats")) exportStats = true;
+        if(args[7].equals("-workload_time")) workloadTime = true;
 
-        Dictionary mDictionary = new Dictionary(parser.getList());
-        Index mIndex = new Index(mDictionary, parser.getList());
+
+
+
+        RDFRawParser parser = new RDFRawParser();
+        parser.parse(data);
+
+
+        Dictionary mDictionary = new Dictionary(parser.getListener());
+        Index mIndex = new Index(mDictionary, parser.getListener());
         Model mModel = new Model(mIndex, mDictionary);
         QueryFactory factory = new QueryFactory();
 
-        /*String mQuery = "SELECT ?v0 WHERE {\n" +
-                "\t?v0 <http://purl.org/dc/terms/Location> <http://db.uwaterloo.ca/~galuc/wsdbm/City20> .\n" +
-                "\t?v0 <http://db.uwaterloo.ca/~galuc/wsdbm/gender> <http://db.uwaterloo.ca/~galuc/wsdbm/Gender0> .\n" +
-                "\t?v0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://db.uwaterloo.ca/~galuc/wsdbm/Role2> .\n" +
-                "}";*/
-        //Query q = factory.createSimpleQuery(mQuery);
 
-        //QueryExecutioner qe = new QueryExecutioner(q, mModel);
-
-        //System.out.println(qe.execute());
 
 
         //Return ArrayList containing ArrayList<Query> for each file
@@ -45,15 +54,21 @@ public class RDFSEngine {
 		}
 		*/
 
+        String aggFileName = String.valueOf(output + "output.txt");
+        FileWriter fstream = new FileWriter(aggFileName);
+        BufferedWriter out = new BufferedWriter(fstream);
 
 		int x = 0;
         long startTime = System.currentTimeMillis();
-        for(ArrayList<Query> aq : factory.loadFromFolder("../RDFSEngine/data/querySet")) {
+        for(ArrayList<Query> aq : factory.loadFromFolder(queries)) {
             x++;
             int i=0;
             for(Query q : aq) {
                 QueryExecutioner qe = new QueryExecutioner(q, mModel);
-                qe.execute();
+                for(String s: qe.execute()){
+                    out.write(s+ "\n");
+                }
+
             }
         }
 
