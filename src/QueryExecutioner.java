@@ -89,9 +89,7 @@ public class QueryExecutioner {
     public static TreeSet<Integer> intersection(TreeSet<Integer> a, TreeSet<Integer> b) {
 
         if(a.size()>b.size()) {
-            TreeSet<Integer> tmp = a;
-            a = b;
-            b = tmp;
+           intersection(b, a);
         }
 
         TreeSet<Integer> results = new TreeSet<>();
@@ -126,4 +124,12 @@ public class QueryExecutioner {
         }
         return tmpStack;
     }
+
+    public ArrayList<String> getEvalOrdre(){
+        ArrayList<String> res = new ArrayList<String>();
+        for(Condition c: mQuery.getConditions()){
+            res.add(c.toString());
+        }
+        return res;
     }
+}

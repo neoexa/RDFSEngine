@@ -33,30 +33,14 @@ public class RDFSEngine {
 
 
 
-
-        //Return ArrayList containing ArrayList<Query> for each file
-        //factory.loadFromFolder("../RDFprojet/queries");
-
-        //Return ArrayList containing each query
-		/*for(Query q2 : factory.loadFromFile("../RDFprojet/queries/Q_1_eligibleregion.queryset") ) {
-			QueryExecutioner qe2 = new QueryExecutioner(q2, mModel);
-	        System.out.println(qe2.execute());
-		}/*
-
-
-		/*
-		ArrayList<Query> aq = factory.loadFromFile("../RDFprojet/queries/Q_4_location_nationality_gender_type.queryset");
-		int i=0;
-		for(Query q : aq) {
-			i++;
-			System.out.println("Query "+i + " : ");
-			System.out.println(q.toString());
-		}
-		*/
-
-        String aggFileName = String.valueOf(output + "output.txt");
+        String aggFileName = String.valueOf(output + "results.txt");
         FileWriter fstream = new FileWriter(aggFileName);
         BufferedWriter out = new BufferedWriter(fstream);
+
+        String aggFileName3 = String.valueOf(output + "exportStats.txt");
+        FileWriter fstream3 = new FileWriter(aggFileName);
+        BufferedWriter out3 = new BufferedWriter(fstream);
+
 
 		int x = 0;
         long startTime = System.currentTimeMillis();
@@ -66,7 +50,11 @@ public class RDFSEngine {
             for(Query q : aq) {
                 QueryExecutioner qe = new QueryExecutioner(q, mModel);
                 for(String s: qe.execute()){
-                    out.write(s+ "\n");
+                    if (exportResults)
+                    out.write("Requete n° : "+ x + s + "\n");
+                    if (exportStats) {
+                        out.write(qe.getEvalOrdre().toString() + "\n");
+                    }
                 }
 
             }
@@ -75,8 +63,15 @@ public class RDFSEngine {
         long stopTime = System.currentTimeMillis();
 
         long elapsedTime = stopTime - startTime;
-        System.out.println(elapsedTime + " Milliseconds");
 
+        if(workloadTime) {
+            String aggFileName2 = String.valueOf(output + "exec_time.txt");
+            FileWriter fstream2 = new FileWriter(aggFileName);
+            BufferedWriter out2 = new BufferedWriter(fstream);
+            System.out.println(elapsedTime + " Milliseconds");
+            out2.write(elapsedTime + " Milliseconds");
+
+        }
     }
 
 
